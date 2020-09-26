@@ -1,5 +1,8 @@
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.BPPORT || 9000;
+const HFLIP = process.env.BPHFLIP || false;
+const IRES = process.env.BPIRES || 'medium';
+const SEGTHRES = process.env.BPSEGTHRES || 0.75;
 const tf = tensorflow();
 
 const bodyPix = require('@tensorflow-models/body-pix');
@@ -20,9 +23,9 @@ const http = require('http');
         req.on('end', async () => {
             const image = tf.node.decodeImage(Buffer.concat(chunks));
             segmentation = await net.segmentPerson(image, {
-                flipHorizontal: false,
-                internalResolution: 'medium',
-                segmentationThreshold: 0.75,
+                flipHorizontal: HFLIP,
+                internalResolution: IRES,
+                segmentationThreshold: SEGTHRES,
             });
             res.writeHead(200, { 'Content-Type': 'application/octet-stream' });
             res.write(Buffer.from(segmentation.data));

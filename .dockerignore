@@ -1,0 +1,8 @@
+*
+!bodypix/app.js
+!bodypix/package.json
+!dockerfiles/
+!fakecam/akvcam.py
+!fakecam/akvcam/
+!fakecam/fake.py
+!fakecam/requirements.txt
