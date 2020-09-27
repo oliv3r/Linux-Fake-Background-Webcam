@@ -1,4 +1,3 @@
-
 const PORT = process.env.BPPORT || 9000;
 const HFLIP = process.env.BPHFLIP || false;
 const IRES = process.env.BPIRES || 'medium';

@@ -10,6 +10,8 @@
 set -eux
 
 BODYPIXSOCKET="/run/bodypix.sock"
+BPPORT="${BPPORT:-${BODYPIXSOCKET}}"
+
 
 # run command if it is not starting with a "-" and is an executable in PATH
 if [ "${#}" -gt 0 ] && \
@@ -31,7 +33,7 @@ else
 		exit 1
 	fi
 
-	BPPORT="${BPPORT:-${BODYPIXSOCKET}}"
+	export BPPORT
 	node "/bodypix/app.js" &
 	if [ "${BPPORT}" = "${BODYPIXSOCKET}" ]; then
 		while [ ! -S "${BPPORT}" ]; do
@@ -44,9 +46,10 @@ else
 		# done
 	fi
 	python3 -u "/fakecam/fake.py" \
-	        --webcam-path="/dev/webcam" \
-		--v4l2loopback-path="/dev/v4l2loopback" \
+		--bodypix-url="${BPPORT}" \
 		--image-folder="/images/" \
+		--v4l2loopback-path="/dev/v4l2loopback" \
+	        --webcam-path="/dev/webcam" \
 		"${@}"
 fi
 
